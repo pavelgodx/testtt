@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Web App Test</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h1>Telegram Web App Test</h1>
+    <button onclick="sendData()">Send Data to FastAPI</button>
+
+    <script>
+        function sendData() {
+            const initData = window.Telegram.WebApp.initDataUnsafe || {}; // Fetch initData safely
+            fetch("http://94.231.205.230:8000/user/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id_telegram: initData.user?.id || 0,
+                    username_telegram: initData.user?.username || "unknown",
+                    first_name: initData.user?.first_name || "unknown",
+                    photo_url: initData.user?.photo_url || null
+                })
+            }).then(response => response.json())
+              .then(data => console.log("Response from server:", data))
+              .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+</html>
