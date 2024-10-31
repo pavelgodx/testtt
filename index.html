@@ -12,21 +12,25 @@
 
     <script>
         function sendData() {
-            const initData = window.Telegram.WebApp.initDataUnsafe || {}; // Fetch initData safely
-            fetch("https://b00b-94-231-205-230.ngrok-free.app/user/signup", {
+            const initData = window.Telegram.WebApp.initDataUnsafe || {};
+
+            const payload = {
+                id_telegram: initData.user?.id || 0,
+                username_telegram: initData.user?.username || "unknown",
+                first_name: initData.user?.first_name || "unknown",
+                photo_url: initData.user?.photo_url || null
+            };
+
+            fetch("https://e7ff-94-231-205-230.ngrok-free.app/user/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    id_telegram: initData.user?.id || 0,
-                    username_telegram: initData.user?.username || "unknown",
-                    first_name: initData.user?.first_name || "unknown",
-                    photo_url: initData.user?.photo_url || null
-                })
-            }).then(response => response.json())
-              .then(data => console.log("Response from server:", data))
-              .catch(error => console.error("Error:", error));
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => console.log("Response from server:", data))
+            .catch(error => console.error("Error:", error));
         }
     </script>
 </body>
